@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 
 
-
 class CustomUser(AbstractBaseUser):
     email = models.EmailField()
     first_name = models.CharField(
@@ -60,8 +59,8 @@ class Chapter(models.Model):
     )
     subject = models.ForeignKey(
         to=Subject,
-        verbose_name="предмет",
-        related_name="глава предмета"
+        on_delete=models.PROTECT,
+        verbose_name="предмет"
     )
 
     class Meta:
@@ -75,8 +74,8 @@ class Chapter(models.Model):
 class Student(CustomUser):
     group = models.ForeignKey(
         to=Group,
-        verbose_name="группа",
-        related_name="группы студента"
+        on_delete=models.PROTECT,
+        verbose_name="группа"
     )
 
     class Meta:
@@ -104,13 +103,13 @@ class Tutor(CustomUser):
 class Task(models.Model):
     chapter = models.ForeignKey(
         to=Chapter,
-        verbose_name="глава",
-        related_name="глава из задания"
+        on_delete=models.PROTECT,
+        verbose_name="глава"
     )
     tutor = models.ForeignKey(
         to=Tutor,
-        verbose_name="преподаватель",
-        related_name="преподаватель задание"
+        on_delete=models.PROTECT,
+        verbose_name="преподаватель"
     )
     acc_rate = models.FloatField(
         verbose_name="рейтинг"
@@ -133,22 +132,22 @@ class Result(models.Model):
     INACTIVE = "INA"
     ON_CHECKING = "OCH"
 
-    STATUSES = {
-        ACTIVE: "Active",
-        DONE: "Done",
-        INACTIVE: "Inactive",
-        ON_CHECKING: "On checking",
-    }
+    STATUSES = [
+        (ACTIVE, "Active"),
+        (DONE, "Done"),
+        (INACTIVE, "Inactive"),
+        (ON_CHECKING, "On checking"),
+    ]
 
     student = models.ForeignKey(
         to=Student,
-        verbose_name="студент",
-        related_name="выполнивший"
+        on_delete=models.PROTECT,
+        verbose_name="студент"
     )
     task = models.ForeignKey(
         to=Task,
-        verbose_name="задание",
-        related_name="задание результат"
+        on_delete=models.PROTECT,
+        verbose_name="задание"
     )
     status = models.CharField(
         choices=STATUSES,
