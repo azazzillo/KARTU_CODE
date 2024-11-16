@@ -1,9 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
 class CustomUser(AbstractBaseUser):
-    email = models.EmailField()
+    email = models.EmailField(
+        unique=True
+    )
     first_name = models.CharField(
         verbose_name="имя",
         max_length=200
@@ -13,7 +15,10 @@ class CustomUser(AbstractBaseUser):
         max_length=200
     )
 
+    USERNAME_FIELD = 'email'
+
     class Meta:
+        app_label = 'auths'
         verbose_name = "пользователь"
         verbose_name_plural = "пользователи"
 

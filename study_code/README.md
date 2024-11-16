@@ -1,0 +1,1 @@
+# KARTU_CODE
